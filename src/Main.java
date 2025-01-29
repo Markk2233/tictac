@@ -16,29 +16,61 @@ class TicTacToe {
         }
     }
 
-    public void makeMove(Scanner sc, int turn) {
+    public int makeMove(Scanner sc, int turn) {
         System.out.println("hodi eblan");
-        int row = sc.nextInt();
         int col = sc.nextInt();
-        if (row < 1 || row > 3 || col < 1 || col > 3) {
-            System.out.println("loh");
+        int row = sc.nextInt();
+        while (row < 1 || row > 3 || col < 1 || col > 3) {
+            System.out.println("loh, vvodi zanovo");
+            row = sc.nextInt();
+            col = sc.nextInt();
         }
-        putMoveIntoBoard(row, col, turn);
+        return putMoveIntoBoard(col, row, turn);
     }
 
-    private void putMoveIntoBoard(int row, int col, int turn) {
-        if (turn++ == 1) {
-            board[row][col] = 'X';
+    private int putMoveIntoBoard(int col, int row, int turn) {
+        if (turn == 1) {
+            turn++;
+            board[col-1][row-1] = 'X';
         }
-        else if (turn-- == 2) {
-            board[row][col] = 'O';
+        else if (turn == 2) {
+            turn--;
+            board[col-1][row-1] = '0';
         }
+        return turn;
     }
 
 
 
-    private void checkWin() {
+    public boolean checkWin() {
+        if ((board[0][0] == 'X' && board[0][1] == 'X' && board[0][2] == 'X') ||
+            (board[1][0] == 'X' && board[1][1] == 'X' && board[1][2] == 'X') ||
+            (board[2][0] == 'X' && board[2][1] == 'X' && board[2][2] == 'X') ||
+            (board[0][0] == 'X' && board[1][0] == 'X' && board[2][0] == 'X') ||
+            (board[0][1] == 'X' && board[1][1] == 'X' && board[2][1] == 'X') ||
+            (board[0][2] == 'X' && board[1][2] == 'X' && board[2][2] == 'X') ||
+            (board[0][0] == 'X' && board[1][1] == 'X' && board[2][2] == 'X') ||
+            (board[0][2] == 'X' && board[1][1] == 'X' && board[2][0] == 'X'))
+        {
+            printBoard();
+            System.out.println("First player wins...");
+            return false;
+        }
+        if ((board[0][0] == '0' && board[0][1] == '0' && board[0][2] == '0') ||
+            (board[1][0] == '0' && board[1][1] == '0' && board[1][2] == '0') ||
+            (board[2][0] == '0' && board[2][1] == '0' && board[2][2] == '0') ||
+            (board[0][0] == '0' && board[1][0] == '0' && board[2][0] == '0') ||
+            (board[0][1] == '0' && board[1][1] == '0' && board[2][1] == '0') ||
+            (board[0][2] == '0' && board[1][2] == '0' && board[2][2] == '0') ||
+            (board[0][0] == '0' && board[1][1] == '0' && board[2][2] == '0') ||
+            (board[0][2] == '0' && board[1][1] == '0' && board[2][0] == '0'))
+        {
+            printBoard();
+            System.out.println("Second player wins...");
+            return false;
+        }
 
+        return true;
     }
 
 }
@@ -48,13 +80,14 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         TicTacToe game1 = new TicTacToe();
+        int turn = 1;
 
-        while (!game1.isLoh) {
+        while (game1.checkWin()) {
 
 
             game1.printBoard();
 
-            game1.makeMove(scanner, 1);
+            turn = game1.makeMove(scanner, turn);
 
         }
 
